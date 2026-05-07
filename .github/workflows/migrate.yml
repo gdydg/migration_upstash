@@ -1,0 +1,21 @@
+name: Migrate Redis Data
+
+on:
+  workflow_dispatch: # 允许你手动点击按钮触发
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install ioredis
+      - name: Run Migration Script
+        env:
+          UPSTASH_URL: ${{ secrets.UPSTASH_URL }}
+          NEW_REDIS_URL: ${{ secrets.NEW_REDIS_URL }}
+        run: node migrate.js
